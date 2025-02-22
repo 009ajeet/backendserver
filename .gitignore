@@ -1,0 +1,50 @@
+# Node.js dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables
+.env
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+debug.log
+
+# Database files (if using local MongoDB)
+*.mongodb
+*.db
+*.sqlite
+
+# Process ID files
+pids/
+*.pid
+*.seed
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Editor and IDE settings
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Build files
+dist/
+build/
+coverage/
+
+# Ignore all test coverage reports
+/coverage
+/jest-cache
+/jest-coverage
+
+# Temporary files
+tmp/
+*.tmp
