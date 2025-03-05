@@ -9,6 +9,7 @@ yarn-error.log*
 
 cc.js
 
+*public/
 # Logs
 logs/
 *.log
