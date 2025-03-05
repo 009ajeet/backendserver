@@ -7,6 +7,8 @@ yarn-error.log*
 # Environment variables
 .env
 
+cc.js
+
 # Logs
 logs/
 *.log
