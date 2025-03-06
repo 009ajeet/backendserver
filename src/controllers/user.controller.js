@@ -3,19 +3,19 @@ import { ApiError } from "../utils/ApiError.js";
 import { User } from "../models/user.model.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
-
+import mongoose from "mongoose";
 const generateAccessAndRefreshToken = async (userId) => {
     try {
         const user = await User.findById(userId)
         const refreshToken = user.generateRefreshToken()
-        const accessToken = user.generateAcessToken()
-
+        const accessToken = user.generateAccessToken()
         user.refreshToken = refreshToken
         await user.save({ validateBeforeSave: false })
+        console.log("Tokens Generated Successfully")
 
         return { accessToken, refreshToken }
     } catch (error) {
-        throw new ApiError(500, "something went wrong while generating and acess token")
+        throw new ApiError(500, "something went wrong while generating and acess token", error)
     }
 
 }
@@ -93,27 +93,28 @@ const loginUser = asyncHandler(async (req, res) => {
     // check cookiew
 
     const { email, username, password } = req.body
-
-    if (!email || !username) {
-        throw new ApiError(400, "username or password is required")
+    console.log(req.body)
+    if (!email && !username) {
+        throw new ApiError(400, "username or email is required")
     }
 
     const user = await User.findOne({
-        $or: [{ username, email }]
-    })
+        $or: [{ username: username }, { email: email }]
+    });
+    console.log(user);
 
     if (!user) throw new ApiError(404, "user is not exist")
 
     const isPasswordValid = await user.isPasswordCorrect(password)
 
     if (!isPasswordValid) throw new ApiError(403, "password is incorrect")
-
+    console.log(user._id)
     const { refreshToken, accessToken } = await generateAccessAndRefreshToken(user._id)
-
-    const loggedInUser = User.findById(user._id).select("-password -refreshToken")
+    const loggedInUser = await User.findById(user._id).select("-password -refreshToken")
+    console.log(user._id)
 
     const options = {
-        httpOnly: true,
+        httpsOnly: true,
         secure: true,
 
     }
